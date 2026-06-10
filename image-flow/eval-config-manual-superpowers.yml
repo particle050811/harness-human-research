@@ -1,7 +1,7 @@
-# manual-skill 模式专属配置（run-eval-manual-skill.sh 读取）
+# superpowers 变体专属的 manual-skill 配置（run-eval-manual-skill.sh 按变体名读取）
 # 与 eval-config.yml 的区别：没有单条 prompt，改为 rounds 剧本，
-# 每轮以 "/skill名" 开头模拟人工主动调用，逐轮驱动同一会话。
-# 剧本设计说明见 agent-eval-manual-skill.md §3
+# 每轮以 superpowers 的 "/skill名" 开头模拟人工主动调用，逐轮驱动同一会话。
+# 提示词剧本说明见 agent-eval-manual-superpowers.md
 
 extends: ../eval-common.yml
 

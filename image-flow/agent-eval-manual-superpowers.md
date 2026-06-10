@@ -1,8 +1,9 @@
-# image-flow 人工主动调用 skill 流程文档（manual-skill 模式）
+# image-flow superpowers 专属流程提示词文档（manual-skill 模式）
 
 > 基于开发文档 `agent-eval-spec.md`（需求输入不变），把原来的单条流程提示词拆成多轮，
-> 每轮提示词前面加 `/skill名` 显式调用 skill，模拟人工主动调用的场景。
-> 配套：`eval-config-manual-skill.yml`（轮次提示词，脚本实际读取）、`run-eval-manual-skill.sh`（专属脚本）。
+> 每轮提示词前面加 superpowers 的 `/skill名` 显式调用，模拟人工主动调用的场景。
+> 配套：`eval-config-manual-superpowers.yml`（轮次提示词，脚本实际读取）、`run-eval-manual-skill.sh`（驱动脚本）。
+> 其他变体（如 openspec）各写各的专属文档与 `eval-config-manual-<变体>.yml`，脚本按变体名自动取对应配置。
 
 ## 流程提示词（共 11 轮，逐轮发送同一会话）
 
@@ -20,7 +21,7 @@
 | 10 | `/verification-before-completion` 运行 compile / check-types / lint / test，全绿为止 |
 | 11 | `/requesting-code-review` 对照 spec 全量审查，修复高优先级问题后重跑检查 |
 
-每轮提示词全文以 `eval-config-manual-skill.yml` 的 `rounds:` 为准；每轮末尾统一带"完成后自行验证、全程不需要确认"。
+每轮提示词全文以 `eval-config-manual-superpowers.yml` 的 `rounds:` 为准；每轮末尾统一带"完成后自行验证、全程不需要确认"。
 若某轮中途出 bug，由人工补一轮 `/systematic-debugging`（不在固定剧本内）。
 
 ## 用法

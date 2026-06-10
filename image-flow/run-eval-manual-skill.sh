@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # manual-skill 模式专属脚本：模拟人工逐轮以 "/skill名 任务" 驱动开发流程。
 # 与 run-eval.sh 的区别：不发单条 prompt 交给模型自主跑完，而是按
-# eval-config-manual-skill.yml 的 rounds 剧本逐轮 headless 调用——
+# eval-config-manual-<变体>.yml（如 superpowers） 的 rounds 剧本逐轮 headless 调用——
 # 第 1 轮 `claude -p`，之后 `claude -p --continue` 续接同一会话。
-# 用法：./run-eval-manual-skill.sh [skill变体，默认 superpowers] [配置文件，默认 eval-config-manual-skill.yml]
+# 用法：./run-eval-manual-skill.sh [skill变体，默认 superpowers] [配置文件，默认 eval-config-manual-<变体>.yml]
+# 每个变体配一份专属轮次配置（如 eval-config-manual-superpowers.yml），按变体名自动选取
 set -euo pipefail
 cd "$(dirname "$0")"
 
 VARIANT="${1:-superpowers}"
-CONFIG="${2:-eval-config-manual-skill.yml}"
+CONFIG="${2:-eval-config-manual-$VARIANT.yml}"
 [ -f "$CONFIG" ] || { echo "配置文件不存在: $CONFIG" >&2; exit 1; }
 
 # 轮次剧本写入临时目录（01.txt、02.txt…），其余字段输出 shell 变量

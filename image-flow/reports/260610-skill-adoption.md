@@ -30,4 +30,4 @@
 2. 这个落差本身是有效结论：**非 Claude 主模型在长程自主任务中几乎不自发使用 skill**，可作为 harness 跨模型兼容性研究的核心数据点。
 3. TODO：
    - ① 修复 gstack 变体布局（子 skill 提平为 `skills/<name>/SKILL.md`）并重跑；
-   - ② 改用 manual-skill 模式（每轮提示词前加 `/skill名` 模拟人工主动调用，见 `agent-eval-manual-skill.md`）。
+   - ② 改用 manual-skill 模式（每轮提示词前加 `/skill名` 模拟人工主动调用，见 `agent-eval-manual-superpowers.md`）。
