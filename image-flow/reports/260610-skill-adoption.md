@@ -16,7 +16,7 @@
 
 ## 主题二：模型不调用的原因
 
-1. **被测模型对 skill 触发指令遵循度弱**：skill 触发完全依赖模型自觉遵循 description 中的指令，deepseek-v4-pro 在此方面明显弱于 Claude 系（待加 Claude 对照组验证）。
+1. **被测模型对 skill 触发指令遵循度弱**：skill 触发完全依赖模型自觉遵循 description 中的指令，deepseek-v4-pro 在此方面遵循度低。
 2. **长程任务中 skill 列表只在开头出现一次**：superpowers 唯一一次调用发生在会话第 32 行（全文 463 行），即开场阶段；之后 200+ 轮自主编码循环再未回头。SessionStart hook（日间作废 run 后补入，见 260610-smoke-and-pipeline.md 主题三）只把调用率从 0 提到 1，**hook 解决"开场可见性"，解决不了"中途遗忘"**。
 3. **prompt 引导太弱**：仅一句泛泛的"如果你有可用的 skills……请主动使用"，叠加"全程不需要确认直接完成"+ bypassPermissions，把模型推向埋头直接执行。
 
@@ -30,5 +30,4 @@
 2. 这个落差本身是有效结论：**非 Claude 主模型在长程自主任务中几乎不自发使用 skill**，可作为 harness 跨模型兼容性研究的核心数据点。
 3. TODO：
    - ① 修复 gstack 变体布局（子 skill 提平为 `skills/<name>/SKILL.md`）并重跑；
-   - ② 试验强引导 prompt（按里程碑点名 skill）与周期性重注入（PostToolUse/PreCompact hook）对调用率的影响；
-   - ③ 增加 Claude 模型对照组。
+   - ② 改用 manual-skill 模式（每轮提示词前加 `/skill名` 模拟人工主动调用，见 `agent-eval-manual-skill.md`）。
