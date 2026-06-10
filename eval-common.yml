@@ -1,0 +1,17 @@
+# 评测公共配置（多个评测项目共用，被各项目 eval-config.yml 通过 extends 继承）
+# 路径相对各项目自己的目录解析；项目配置中的同名字段会覆盖这里
+
+# 测试目录创建位置与命名前缀，实际目录为 <dir_prefix>-<skill变体>-<yyMMddHHmmSS>
+test_root: ./runs
+dir_prefix: eval
+
+# skill 变体目录：每个子目录是一个变体，含 home/（用户级，复制进隔离 CLAUDE_CONFIG_DIR）
+# 与 project/（项目级，复制进测试目录根），两者均可省略（empty 基线两个都没有）
+skill_variants_dir: ../skill-variants
+
+# claude-deepseek 启动参数（alias 在脚本里不可用，直接写底层命令）
+claude:
+  bin: ~/.claude-2.1.152/node_modules/.bin/claude
+  settings: ~/.claude/settings-deepseek.json
+  # bypassPermissions 完全无人值守；要逐步确认可改 acceptEdits
+  permission_mode: bypassPermissions

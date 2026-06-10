@@ -1,0 +1,21 @@
+# 依赖与构建产物
+node_modules/
+image-flow/runs/*/dist/
+image-flow/runs/*/out/
+
+# 评测运行目录：保留产物源码与会话记录（.claude-home/projects/），
+# 忽略隔离配置目录里的缓存、运行时状态与 skill 变体副本（源在 skill-variants/）
+image-flow/runs/*/.claude-home/plugins/
+image-flow/runs/*/.claude-home/skills/
+image-flow/runs/*/.claude-home/file-history/
+image-flow/runs/*/.claude-home/shell-snapshots/
+image-flow/runs/*/.claude-home/backups/
+image-flow/runs/*/.claude-home/session-env/
+image-flow/runs/*/.claude-home/sessions/
+image-flow/runs/*/.claude-home/todos/
+image-flow/runs/*/.claude-home/statsig/
+image-flow/runs/*/.claude-home/cache/
+
+# gstack 变体是 46MB 第三方仓库快照（布局有缺陷待重做），只保留顶层 SKILL.md 供查证
+skill-variants/gstack/home/skills/gstack/*
+!skill-variants/gstack/home/skills/gstack/SKILL.md

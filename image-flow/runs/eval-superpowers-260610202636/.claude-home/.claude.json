@@ -1,0 +1,86 @@
+{
+  "numStartups": 1,
+  "tipsHistory": {
+    "new-user-warmup": 1
+  },
+  "hasCompletedOnboarding": true,
+  "projects": {
+    "/home/particle/2026-1/harness-human-research/image-flow/runs/eval-superpowers-260610202636": {
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": null,
+      "lastGracefulShutdown": true,
+      "lastVersionBase": "2.1.152",
+      "lastCost": 4.727605999999999,
+      "lastAPIDuration": 897418,
+      "lastAPIDurationWithoutRetries": 896912,
+      "lastToolDuration": 74444,
+      "lastDuration": 2285206,
+      "lastLinesAdded": 3712,
+      "lastLinesRemoved": 42,
+      "lastTotalInputTokens": 98037,
+      "lastTotalOutputTokens": 57909,
+      "lastTotalCacheCreationInputTokens": 0,
+      "lastTotalCacheReadInputTokens": 5579392,
+      "lastTotalWebSearchRequests": 0,
+      "lastFpsAverage": 16.56,
+      "lastFpsLow1Pct": 128.47,
+      "lastModelUsage": {
+        "deepseek-v4-pro": {
+          "inputTokens": 97568,
+          "outputTokens": 56777,
+          "cacheReadInputTokens": 5579392,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 4.696960999999999
+        },
+        "deepseek-v4-flash": {
+          "inputTokens": 469,
+          "outputTokens": 1132,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.030645
+        }
+      },
+      "lastSessionId": "d9b6a260-197e-4465-af11-ada169226e8a",
+      "lastSessionMetrics": {
+        "frame_duration_ms_count": 23804,
+        "frame_duration_ms_min": 0.10396799999580253,
+        "frame_duration_ms_max": 45.39632899989374,
+        "frame_duration_ms_avg": 1.1779139494622823,
+        "frame_duration_ms_p50": 0.9708279999904335,
+        "frame_duration_ms_p95": 2.3512135499739073,
+        "frame_duration_ms_p99": 5.778388619999167,
+        "hook_duration_ms_count": 66,
+        "hook_duration_ms_min": 0,
+        "hook_duration_ms_max": 82,
+        "hook_duration_ms_avg": 1.2878787878787878,
+        "hook_duration_ms_p50": 0,
+        "hook_duration_ms_p95": 0.75,
+        "hook_duration_ms_p99": 29.34999999999954,
+        "pre_tool_hook_duration_ms_count": 103,
+        "pre_tool_hook_duration_ms_min": 0,
+        "pre_tool_hook_duration_ms_max": 6,
+        "pre_tool_hook_duration_ms_avg": 0.4174757281553398,
+        "pre_tool_hook_duration_ms_p50": 0,
+        "pre_tool_hook_duration_ms_p95": 4.699999999999974,
+        "pre_tool_hook_duration_ms_p99": 6
+      }
+    }
+  },
+  "firstStartTime": "2026-06-10T12:26:37.596Z",
+  "opusProMigrationComplete": true,
+  "sonnet1m45MigrationComplete": true,
+  "seenNotifications": {},
+  "migrationVersion": 13,
+  "lastReleaseNotesSeen": "2.1.152",
+  "userID": "1612155285434f351cfc9f0297ba00de19fc1cc2b085121d4628b49a95e15fdf",
+  "officialMarketplaceAutoInstallAttempted": true,
+  "officialMarketplaceAutoInstalled": true,
+  "skillUsage": {
+    "writing-plans": {
+      "usageCount": 1,
+      "lastUsedAt": 1781094425080
+    }
+  }
+}

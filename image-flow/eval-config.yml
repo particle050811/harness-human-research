@@ -1,0 +1,21 @@
+# image-flow Agent 评测项目配置（run-eval.sh 读取）
+# 公共部分（claude 路径、权限模式、skill 变体目录等）继承自外层 eval-common.yml，
+# 这里只写本项目特有内容；如需覆盖公共字段，在本文件写同名字段即可
+
+extends: ../eval-common.yml
+
+# 复制进测试目录的文件（rubric 为评测者自留，不复制给被测 Agent）
+files:
+  - src: agent-eval-spec.md
+    dest: agent-eval-spec.md
+  - src: grsai-api.md
+    dest: docs/grsai-api.md
+
+# 启动后注入的初始提示词，驱动 Agent 完成全部开发流程
+prompt: |
+  请阅读当前目录下的 agent-eval-spec.md（API 文档在 docs/grsai-api.md），
+  以该文档为唯一需求输入，从这个空目录开始实现 image-flow VS Code 扩展的全部功能。
+  按文档 §13 的里程碑顺序（M1~M8）逐阶段推进，每阶段完成后自行验证再继续。
+  最终要求 npm run compile、npm run check-types、npm run lint、npm test 全部通过。
+  如果你有可用的 skills 或工作流命令，请在合适的环节主动使用它们。
+  全程不需要向我确认，直接完成全部开发流程。

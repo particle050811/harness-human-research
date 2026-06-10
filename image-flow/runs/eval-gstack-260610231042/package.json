@@ -1,0 +1,170 @@
+{
+  "name": "image-flow",
+  "displayName": "Image Flow",
+  "version": "0.1.0",
+  "publisher": "image-flow",
+  "description": "VS Code 扩展：在 Markdown 中调用 AI 绘图后端生成图片",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "image-flow",
+          "title": "AI 绘图",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "image-flow": [
+        {
+          "type": "webview",
+          "id": "image-flow.sidebar",
+          "name": "AI 绘图"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "image-flow.generateImage",
+        "title": "Image Flow: 生成 AI 图片"
+      },
+      {
+        "command": "image-flow.previewRequest",
+        "title": "Image Flow: 预览请求"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "image-flow.generateImage",
+          "when": "resourceExtname == .md"
+        },
+        {
+          "command": "image-flow.previewRequest",
+          "when": "resourceExtname == .md"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "image-flow.generateImage",
+          "when": "resourceExtname == .md"
+        },
+        {
+          "command": "image-flow.previewRequest",
+          "when": "resourceExtname == .md"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Image Flow",
+      "properties": {
+        "image-flow.baseUrl": {
+          "type": "string",
+          "default": "https://grsai.dakka.com.cn",
+          "enum": [
+            "https://grsai.dakka.com.cn",
+            "https://grsaiapi.com"
+          ],
+          "description": "API 节点地址"
+        },
+        "image-flow.model": {
+          "type": "string",
+          "default": "nano-banana-2",
+          "enum": [
+            "nano-banana-2",
+            "nano-banana-pro",
+            "gpt-image-2",
+            "gpt-image-2-vip"
+          ],
+          "description": "生成模型"
+        },
+        "image-flow.aspectRatio": {
+          "type": "string",
+          "default": "3:4",
+          "enum": [
+            "1:1",
+            "16:9",
+            "9:16",
+            "4:3",
+            "3:4"
+          ],
+          "description": "图片比例"
+        },
+        "image-flow.imageSize": {
+          "type": "string",
+          "default": "1K",
+          "enum": [
+            "1K",
+            "2K",
+            "4K"
+          ],
+          "description": "分辨率"
+        },
+        "image-flow.concurrency": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "一次生成的并发张数"
+        },
+        "image-flow.workbenchCols": {
+          "type": "integer",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 8,
+          "description": "工作台素材缩略图每行张数"
+        },
+        "image-flow.tasksCols": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 8,
+          "description": "任务页缩略图每行张数"
+        },
+        "image-flow.modelInjections": {
+          "type": "object",
+          "default": {},
+          "description": "模型 → 注入提示词的映射"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "npm run check-types && npm run lint && node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "npm run check-types && npm run lint && node esbuild.config.mjs --production",
+    "check-types": "tsc --noEmit && tsc -p tsconfig.webview.json --noEmit",
+    "lint": "eslint src/ webview/",
+    "test": "tsc -p tsconfig.test.json && mocha"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.6",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.20.0",
+    "eslint": "^9.0.0",
+    "@eslint/js": "^9.0.0",
+    "typescript-eslint": "^8.0.0",
+    "typescript": "^5.4.0",
+    "mocha": "^10.3.0"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "@radix-ui/react-select": "^2.1.0",
+    "@radix-ui/react-scroll-area": "^1.1.0"
+  }
+}

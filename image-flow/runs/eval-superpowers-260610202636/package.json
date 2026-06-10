@@ -1,0 +1,146 @@
+{
+  "name": "image-flow",
+  "displayName": "Image Flow",
+  "description": "在 VS Code 中调用 AI 绘图后端生成图片",
+  "version": "1.0.0",
+  "publisher": "image-flow",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "image-flow",
+          "title": "AI 绘图",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "image-flow": [
+        {
+          "type": "webview",
+          "id": "image-flow.sidebar",
+          "name": "AI 绘图"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "image-flow.generateImage",
+        "title": "Image Flow: 生成 AI 图片"
+      },
+      {
+        "command": "image-flow.previewRequest",
+        "title": "Image Flow: 预览请求"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "image-flow.generateImage",
+          "when": "resourceExtname == .md"
+        },
+        {
+          "command": "image-flow.previewRequest",
+          "when": "resourceExtname == .md"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "image-flow.generateImage",
+          "when": "resourceExtname == .md"
+        },
+        {
+          "command": "image-flow.previewRequest",
+          "when": "resourceExtname == .md"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Image Flow",
+      "properties": {
+        "image-flow.model": {
+          "type": "string",
+          "default": "nano-banana-2",
+          "enum": [
+            "nano-banana-2",
+            "nano-banana-pro",
+            "gpt-image-2",
+            "gpt-image-2-vip"
+          ],
+          "description": "AI 绘图模型"
+        },
+        "image-flow.aspectRatio": {
+          "type": "string",
+          "default": "3:4",
+          "enum": [
+            "1:1",
+            "16:9",
+            "9:16",
+            "4:3",
+            "3:4"
+          ],
+          "description": "图片比例"
+        },
+        "image-flow.imageSize": {
+          "type": "string",
+          "default": "1K",
+          "enum": [
+            "1K",
+            "2K",
+            "4K"
+          ],
+          "description": "图片分辨率"
+        },
+        "image-flow.concurrency": {
+          "type": "number",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "一次生成的并发张数"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "npm run check-types && npm run lint && node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch",
+    "package": "npm run check-types && npm run lint && node esbuild.config.js --production",
+    "check-types": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.webview.json --noEmit",
+    "lint": "eslint src/ test/ media/",
+    "test": "tsc -p tsconfig.test.json && mocha --config .mocharc.json",
+    "vscode:prepublish": "npm run package"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.0.0",
+    "mocha": "^11.7.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.0.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.0",
+    "@radix-ui/react-scroll-area": "^1.2.0",
+    "@radix-ui/react-select": "^2.1.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

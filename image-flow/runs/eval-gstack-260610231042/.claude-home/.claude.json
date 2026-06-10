@@ -1,0 +1,26 @@
+{
+  "numStartups": 1,
+  "tipsHistory": {
+    "new-user-warmup": 1,
+    "plan-mode-for-complex-tasks": 1
+  },
+  "hasCompletedOnboarding": true,
+  "projects": {
+    "/home/particle/2026-1/harness-human-research/image-flow/runs/eval-gstack-260610231042": {
+      "hasTrustDialogAccepted": true,
+      "projectOnboardingSeenCount": null,
+      "lastGracefulShutdown": false,
+      "lastVersionBase": "2.1.152"
+    }
+  },
+  "firstStartTime": "2026-06-10T15:10:44.073Z",
+  "opusProMigrationComplete": true,
+  "sonnet1m45MigrationComplete": true,
+  "seenNotifications": {},
+  "migrationVersion": 13,
+  "lastReleaseNotesSeen": "2.1.152",
+  "userID": "796e450a90c61fe44f62d859f38f43b83e9dfdad39b6bc5c8e422f33b3622e9f",
+  "officialMarketplaceAutoInstallAttempted": true,
+  "officialMarketplaceAutoInstalled": true,
+  "showSpinnerTree": false
+}
