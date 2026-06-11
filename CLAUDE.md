@@ -33,6 +33,8 @@ ROUND=<实验轮次号> ./run-eval-manual-skill.sh setup <变体>    # empty / s
 2. **对照 spec 评估**：本轮里程碑对应的 spec 章节逐项核对，发现缺漏记下来（评测员自己要清楚缺什么）。
 3. **拼下一轮提示词**：剧本对应轮次的文本（`$RUN_DIR/.claude-home/rounds/NN.txt`，skill 变体自带 `/skill名` 前缀）+ 基于上一轮总结的**大方向指导**。
 
+**路径越界守卫（path-guard hook）**：setup 会自动把 `image-flow/eval-hooks/path-guard.py` 装进 `$RUN_DIR/.claude-home/hooks/` 并注册为 PreToolUse hook（bypassPermissions 下仍生效）——文件类工具只放行 run 目录与 /tmp，Bash 命令出现"评测仓库内、run 目录外"的绝对路径即拒绝，拦截理由经 stderr 回灌给被测模型让其自行改用项目内路径。背景：260611 两次监工试跑中被测模型把上级 `image-flow/` 猜成项目根、将产物写进评测仓库（嵌套 git 仓库挡不住猜绝对路径）。评测员每轮验收时可用 `grep -c '拒绝：' <会话jsonl>` 查看拦截次数；若发生拦截，说明模型在尝试越界，在下一轮反馈中按监工尺度提醒。已知局限：Bash 只识别绝对路径（`cd ..` 类相对逃逸不拦）；`.claude-home/` 读取未拦（skill 加载需要），剧本防剧透仍靠藏在 `.claude-home/rounds/`。
+
 **指导尺度（关键约束）**：监工只根据模型的轮次总结给方向性反馈，模拟真实用户——可以指出现象和需求出处（如"侧栏进度条在任务进行中不会动，对照 spec §8.4 自查"、"上一轮你说完成了 X，但提交记录里没有对应改动"），**不给代码级细节**（不点名函数、不说在哪个文件加什么调用、不贴代码）。缺陷怎么修由被测模型自己定位。
 
 背景：260611 根因分析（`image-flow/reports/round2-01-260611-manual-superpowers-vs-baseline.md` 主题四）表明固定剧本下 spec 在执行期离场、上下文压缩后计划只剩切片，导致长尾需求丢失——监工模式的核心是每轮像真实用户一样验收并把方向性反馈送回被测会话，而不是替它写代码。

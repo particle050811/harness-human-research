@@ -162,6 +162,23 @@ if [ -d "$VARIANT_DIR/home" ]; then
   echo "已安装用户级 skill: $VARIANT/home/ -> $CONFIG_HOME/"
 fi
 
+# 路径越界守卫：PreToolUse hook 拦截 run 目录外的文件读写与 Bash 路径引用
+# （嵌套 git 仓库挡不住模型直接猜上级绝对路径——260611 两次监工试跑均实际越界）
+mkdir -p "$CONFIG_HOME/hooks"
+cp eval-hooks/path-guard.py "$CONFIG_HOME/hooks/path-guard.py"
+python3 - "$CONFIG_HOME/settings.json" <<'PY'
+import json, os, sys
+path = sys.argv[1]
+settings = json.load(open(path)) if os.path.exists(path) else {}
+settings.setdefault("hooks", {}).setdefault("PreToolUse", []).append({
+    "matcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Glob|Grep|Bash",
+    "hooks": [{"type": "command",
+               "command": "python3 \"$CLAUDE_CONFIG_DIR/hooks/path-guard.py\""}],
+})
+json.dump(settings, open(path, "w"), ensure_ascii=False, indent=2)
+PY
+echo "已安装路径越界守卫: eval-hooks/path-guard.py -> $CONFIG_HOME/hooks/"
+
 # 预置 onboarding 完成与目录信任标记，避免新配置目录首次启动卡在引导界面
 python3 - "$CONFIG_HOME/.claude.json" "$RUN_DIR" <<'PY'
 import json, sys
