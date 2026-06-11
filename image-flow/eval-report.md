@@ -8,3 +8,4 @@
 | round1（自主模式） | 2026-06-10 晚间 | [round1-02-260610-skill-adoption.md](reports/round1-02-260610-skill-adoption.md) | 四变体 skill 调用率横向对比：skill 可见但几乎零调用，原因分析与 TODO；gstack 变体布局缺陷（run 作废） |
 | round2（固定剧本） | 2026-06-11 上午 | [round2-01-260611-manual-superpowers-vs-baseline.md](reports/round2-01-260611-manual-superpowers-vs-baseline.md) | 固定剧本 superpowers 与自主基线对比；根因分析：spec 执行期离场、上下文压缩后计划只剩切片 |
 | round3（监工模式） | 2026-06-11 下午 | [round3-01-260611-supervised-empty-trial.md](reports/round3-01-260611-supervised-empty-trial.md) | 监工模式 empty 对照组首跑记录；首个 run 越界写入评测仓库的取证与隔离修复 |
+| round3（监工模式） | 2026-06-11 晚间 | [round3-02-260611-supervised-superpowers-vs-empty.md](reports/round3-02-260611-supervised-superpowers-vs-empty.md) | 监工模式 superpowers 与 empty 对照：红线逐项核对各遗留 1 处违例打平，skill 净收益在版本史与工程结构；未缓存输入 2.49 倍开销分析；首轮三次重跑等基础设施事件 |
