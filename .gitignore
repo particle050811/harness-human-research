@@ -1,11 +1,12 @@
 # 依赖与构建产物
 node_modules/
 
-# 评测运行目录：默认不进 git，只放行各 run 顶层的对话记录导出（transcript.md/html）
+# 评测运行目录（runs/round<N>/<run>/）：默认不进 git，只放行各 run 顶层的对话记录导出（transcript.md/html）
 image-flow/runs/**
 !image-flow/runs/*/
-!image-flow/runs/*/transcript.md
-!image-flow/runs/*/transcript.html
+!image-flow/runs/*/*/
+!image-flow/runs/*/*/transcript.md
+!image-flow/runs/*/*/transcript.html
 
 # gstack 变体是 46MB 第三方仓库快照（布局有缺陷待重做），只保留顶层 SKILL.md 供查证
 skill-variants/gstack/home/skills/gstack/*

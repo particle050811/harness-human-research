@@ -7,14 +7,14 @@
 ## 启动评测
 
 ```bash
-./run-eval.sh superpowers   # 指定变体启动（empty / superpowers / gstack / openspec）
-./run-eval.sh               # 不带参数弹出变体选择菜单（IDE 里点击运行也可以）
+ROUND=<N> ./run-eval.sh superpowers   # 指定变体启动（empty / superpowers / gstack / openspec）
+ROUND=<N> ./run-eval.sh               # 不带参数弹出变体选择菜单（IDE 里点击运行也可以）
 ```
 
 从其他目录启动：
 
 ```bash
-cd ~/2026-1/harness-human-research/image-flow && ./run-eval.sh empty
+cd ~/2026-1/harness-human-research/image-flow && ROUND=<N> ./run-eval.sh empty
 ```
 
 ## 验收插件（评测完成后）
@@ -24,7 +24,7 @@ cd ~/2026-1/harness-human-research/image-flow && ./run-eval.sh empty
 ```bash
 ./eval-test.sh              # 测最新一次 run
 ./eval-test.sh superpowers  # 测该变体最新一次 run
-./eval-test.sh runs/eval-empty-260610191650   # 测指定 run
+./eval-test.sh runs/round1/eval-empty-260610191650   # 测指定 run
 ```
 
 窗口弹出后：活动栏点「AI 绘图」图标看侧栏；打开 run 目录里的 `demo.md` 测预览/生成（生成需在设置页填 Grsai API Key，预览不耗额度）。
@@ -33,7 +33,7 @@ cd ~/2026-1/harness-human-research/image-flow && ./run-eval.sh empty
 
 ## 查看对话记录
 
-在 `runs/eval-<变体>-<时间戳>/` 内（脚本结束时自动生成）：
+在 `runs/round<实验轮次>/eval-<变体>-<时间戳>/` 内（脚本结束时自动生成）：
 
 ```bash
 xdg-open transcript.html   # 渲染好的完整对话网页

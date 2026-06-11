@@ -4,10 +4,11 @@
 # 第 1 轮 `claude -p`，之后 `claude -p --continue` 续接同一会话。
 #
 # 两种用法：
+# run 目录按实验轮次分组（runs/round<N>/），固定剧本与 setup 均须以 ROUND=<N> 指定轮次。
 # 1) 固定剧本模式（原有行为）：按 eval-config-manual-<变体>.yml 的 rounds 剧本自动逐轮跑完
-#      ./run-eval-manual-skill.sh [skill变体，默认 superpowers] [配置文件，默认 eval-config-manual-<变体>.yml]
+#      ROUND=<N> ./run-eval-manual-skill.sh [skill变体，默认 superpowers] [配置文件，默认 eval-config-manual-<变体>.yml]
 # 2) 监工模式（由评测员逐轮驱动，每轮提示词现场拼）：
-#      ./run-eval-manual-skill.sh setup [skill变体] [配置文件]   # 只做准备，打印 RUN_DIR 后退出
+#      ROUND=<N> ./run-eval-manual-skill.sh setup [skill变体] [配置文件]   # 只做准备，打印 RUN_DIR 后退出
 #        剧本各轮文本存入 $RUN_DIR/rounds/ 供拼提示词参考；调用参数存入 $RUN_DIR/.eval-env
 #      ./run-eval-manual-skill.sh round <RUN_DIR> <提示词文件>   # 跑一轮（自动判断是否 --continue）
 #      ./run-eval-manual-skill.sh export <RUN_DIR>              # 会话记录导出 HTML/Markdown
@@ -125,7 +126,8 @@ CLAUDE_SETTINGS="${CLAUDE_SETTINGS/#\~/$HOME}"
 
 # 创建本次测试目录（含变体名，时间戳精确到秒；监工模式加 supervised 前缀以区分驱动方式）
 [ "$MODE" = "setup" ] && DIR_PREFIX="$DIR_PREFIX-supervised"
-RUN_DIR="$TEST_ROOT/$DIR_PREFIX-$VARIANT-$(date +%y%m%d%H%M%S)"
+[ -n "${ROUND:-}" ] || { echo "请用 ROUND=<实验轮次号> 指定本 run 所属轮次（目录将放入 runs/round<N>/）" >&2; exit 1; }
+RUN_DIR="$TEST_ROOT/round$ROUND/$DIR_PREFIX-$VARIANT-$(date +%y%m%d%H%M%S)"
 mkdir -p "$RUN_DIR"
 RUN_DIR="$(cd "$RUN_DIR" && pwd)"
 

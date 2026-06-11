@@ -27,10 +27,10 @@
 ## 用法
 
 ```bash
-./run-eval-manual-skill.sh                # 默认 superpowers 变体
-./run-eval-manual-skill.sh <变体> [配置]   # 显式指定
+ROUND=<N> ./run-eval-manual-skill.sh                # 默认 superpowers 变体
+ROUND=<N> ./run-eval-manual-skill.sh <变体> [配置]   # 显式指定
 ```
 
-第 1 轮 `claude -p` 新会话，之后每轮 `claude -p --continue` 续接；隔离机制、测试目录命名（`runs/eval-manual-<变体>-<时间戳>`）、结束后导出 transcript 均与 run-eval.sh 一致。
+第 1 轮 `claude -p` 新会话，之后每轮 `claude -p --continue` 续接；隔离机制、测试目录命名（`runs/round<实验轮次>/eval-manual-<变体>-<时间戳>`）、结束后导出 transcript 均与 run-eval.sh 一致。
 
 注意：跑完第一轮先查 transcript 确认 `/skill名` 真的展开了 skill；若被当成普通文本发送，该 run 作废。

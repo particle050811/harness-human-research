@@ -32,7 +32,7 @@
 
 ## 主题三：试跑事故——被测会话沿 git 工作树越界（首个 run 作废）
 
-首个 run（…153916）第 2 轮把 M1 的 11 个文件全部写进了评测仓库的 `image-flow/` 源目录并改动仓库根 `.gitignore`。根因与修复（run 目录 git init 隔离、剧本移入 `.claude-home/`）详见 `260611-manual-superpowers-vs-baseline.md` 改进三；同次取证还发现固定剧本 superpowers 跑的逐里程碑提交此前一直打在评测仓库上（`feature/m1-scaffolding` 分支，已删除重建 main）。修复后重跑的 run（…160043）开场即识别"从零开始的项目"，全程零越界。
+首个 run（…153916）第 2 轮把 M1 的 11 个文件全部写进了评测仓库的 `image-flow/` 源目录并改动仓库根 `.gitignore`。根因与修复（run 目录 git init 隔离、剧本移入 `.claude-home/`）详见 `round2-260611-manual-superpowers-vs-baseline.md` 改进三；同次取证还发现固定剧本 superpowers 跑的逐里程碑提交此前一直打在评测仓库上（`feature/m1-scaffolding` 分支，已删除重建 main）。修复后重跑的 run（…160043）开场即识别"从零开始的项目"，全程零越界。
 
 ## 主题四：实验观察
 

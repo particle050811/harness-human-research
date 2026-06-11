@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # 根据 eval-config.yml 自动创建测试目录，复制评测材料与指定 skill 变体，
 # 在隔离的 CLAUDE_CONFIG_DIR 下前台启动 claude-deepseek（旧版 2.1.152）完成全部开发流程。
-# 用法：./run-eval.sh <skill变体> [配置文件，默认 eval-config.yml]
+# 用法：ROUND=<实验轮次号> ./run-eval.sh <skill变体> [配置文件，默认 eval-config.yml]
 #   skill变体 = skill-variants/ 下的目录名（empty / superpowers / gstack / openspec）
+#   run 目录按轮次分组：runs/round<N>/eval-<变体>-<时间戳>/
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -64,7 +65,8 @@ CLAUDE_SETTINGS="${CLAUDE_SETTINGS/#\~/$HOME}"
 [ -f "$CLAUDE_SETTINGS" ] || { echo "settings 文件不存在: $CLAUDE_SETTINGS" >&2; exit 1; }
 
 # 创建本次测试目录（含变体名，时间戳精确到秒）
-RUN_DIR="$TEST_ROOT/$DIR_PREFIX-$VARIANT-$(date +%y%m%d%H%M%S)"
+[ -n "${ROUND:-}" ] || { echo "请用 ROUND=<实验轮次号> 指定本 run 所属轮次（目录将放入 runs/round<N>/）" >&2; exit 1; }
+RUN_DIR="$TEST_ROOT/round$ROUND/$DIR_PREFIX-$VARIANT-$(date +%y%m%d%H%M%S)"
 mkdir -p "$RUN_DIR"
 RUN_DIR="$(cd "$RUN_DIR" && pwd)"
 

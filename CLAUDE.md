@@ -2,8 +2,8 @@
 
 harness 跨模型 skill 评测项目：用同一份 spec（`image-flow/agent-eval-spec.md`，VS Code 扩展 image-flow 从零开发）评测不同 skill 变体对 AI Agent 产出质量的影响。被测模型经 `~/.claude/settings-deepseek.json` 走 DeepSeek 后端，Claude Code 固定 2.1.152（`~/.claude-2.1.152/`）。
 
-- 运行产物在 `image-flow/runs/`（已整体 gitignore，只留本地）
-- 分析报告在 `image-flow/reports/`，按时间段拆文件、按主题分节；报告中"对应改进"一节固定写法：问题 → 方案 → 预期效果
+- 运行产物在 `image-flow/runs/round<实验轮次>/`，按轮次分组（round1 自主模式 / round2 固定剧本 / round3 监工模式 / …）；除各 run 顶层 transcript.md/html 进 git 外其余只留本地。新建 run 须以 `ROUND=<N>` 环境变量指定轮次
+- 分析报告在 `image-flow/reports/`，命名 `round<实验轮次>-<yyMMdd>-<主题简称>.md`，按时间段拆文件、按主题分节，索引在 `image-flow/eval-report.md`；报告中"对应改进"一节固定写法：问题 → 方案 → 预期效果
 - skill 变体源在 `image-flow/skill-variants/<变体>/`（project/ 装进测试目录，home/ 装进隔离的 CLAUDE_CONFIG_DIR）
 
 ## 评测驱动方式
@@ -15,8 +15,8 @@ harness 跨模型 skill 评测项目：用同一份 spec（`image-flow/agent-eva
 
 ```bash
 cd image-flow
-# 1. 准备：建 run 目录（自动带 eval-manual-supervised- 前缀）、装 skill 变体、隔离配置
-./run-eval-manual-skill.sh setup <变体>    # empty / superpowers / ...
+# 1. 准备：建 run 目录（runs/round<N>/ 下，自动带 eval-manual-supervised- 前缀）、装 skill 变体、隔离配置
+ROUND=<实验轮次号> ./run-eval-manual-skill.sh setup <变体>    # empty / superpowers / ...
 #    输出 RUN_DIR；剧本各轮参考文本在 $RUN_DIR/.claude-home/rounds/，调用参数在 $RUN_DIR/.claude-home/eval-env
 #    （剧本与参数藏在 .claude-home 内、run 目录自带隔离 git 仓库——防止被测会话读到剧本或沿工作树上溯到评测仓库）
 
@@ -35,7 +35,7 @@ cd image-flow
 
 **指导尺度（关键约束）**：监工只根据模型的轮次总结给方向性反馈，模拟真实用户——可以指出现象和需求出处（如"侧栏进度条在任务进行中不会动，对照 spec §8.4 自查"、"上一轮你说完成了 X，但提交记录里没有对应改动"），**不给代码级细节**（不点名函数、不说在哪个文件加什么调用、不贴代码）。缺陷怎么修由被测模型自己定位。
 
-背景：260611 根因分析（`image-flow/reports/260611-manual-superpowers-vs-baseline.md` 主题四）表明固定剧本下 spec 在执行期离场、上下文压缩后计划只剩切片，导致长尾需求丢失——监工模式的核心是每轮像真实用户一样验收并把方向性反馈送回被测会话，而不是替它写代码。
+背景：260611 根因分析（`image-flow/reports/round2-260611-manual-superpowers-vs-baseline.md` 主题四）表明固定剧本下 spec 在执行期离场、上下文压缩后计划只剩切片，导致长尾需求丢失——监工模式的核心是每轮像真实用户一样验收并把方向性反馈送回被测会话，而不是替它写代码。
 
 ## 验收
 

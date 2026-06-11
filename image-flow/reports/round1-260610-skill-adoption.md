@@ -17,7 +17,7 @@
 ## 主题二：模型不调用的原因
 
 1. **被测模型对 skill 触发指令遵循度弱**：skill 触发完全依赖模型自觉遵循 description 中的指令，deepseek-v4-pro 在此方面遵循度低。
-2. **长程任务中 skill 列表只在开头出现一次**：superpowers 唯一一次调用发生在会话第 32 行（全文 463 行），即开场阶段；之后 200+ 轮自主编码循环再未回头。SessionStart hook（日间作废 run 后补入，见 260610-smoke-and-pipeline.md 主题三）只把调用率从 0 提到 1，**hook 解决"开场可见性"，解决不了"中途遗忘"**。
+2. **长程任务中 skill 列表只在开头出现一次**：superpowers 唯一一次调用发生在会话第 32 行（全文 463 行），即开场阶段；之后 200+ 轮自主编码循环再未回头。SessionStart hook（日间作废 run 后补入，见 round1-260610-smoke-and-pipeline.md 主题三）只把调用率从 0 提到 1，**hook 解决"开场可见性"，解决不了"中途遗忘"**。
 3. **prompt 引导太弱**：仅一句泛泛的"如果你有可用的 skills……请主动使用"，叠加"全程不需要确认直接完成"+ bypassPermissions，把模型推向埋头直接执行。
 
 ## 主题三：gstack 变体注入缺陷（run 作废）
@@ -40,7 +40,7 @@
 
 **方案**：新增 `run-eval-manual-skill.sh`，不再指望模型自觉触发，改由剧本逐轮 headless 注入 skill 流程文本（首轮 `claude -p`，后续 `--continue` 续接同一会话），模拟人工逐轮输入 `/skill名` 的用法；每个变体配一份 `eval-config-manual-<变体>.yml` 轮次剧本。
 
-**预期效果**：skill 流程的执行不再依赖模型自觉，调用率从"几乎为零"变为"剧本保证逐轮发生"，变体对比恢复区分度。首跑 eval-manual-superpowers-260611093413 验证了流程主干确实被执行（计划文档、逐里程碑提交、收尾 review 均出现），同时也暴露出固定剧本的新问题（spec 在执行期离场），分析与后续方案见 `260611-manual-superpowers-vs-baseline.md`。
+**预期效果**：skill 流程的执行不再依赖模型自觉，调用率从"几乎为零"变为"剧本保证逐轮发生"，变体对比恢复区分度。首跑 eval-manual-superpowers-260611093413 验证了流程主干确实被执行（计划文档、逐里程碑提交、收尾 review 均出现），同时也暴露出固定剧本的新问题（spec 在执行期离场），分析与后续方案见 `round2-260611-manual-superpowers-vs-baseline.md`。
 
 ### 改进二：gstack 变体布局修复（待执行）
 
