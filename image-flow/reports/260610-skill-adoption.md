@@ -31,3 +31,21 @@
 3. TODO：
    - ① 修复 gstack 变体布局（子 skill 提平为 `skills/<name>/SKILL.md`）并重跑；
    - ② 改用 manual-skill 模式（每轮提示词前加 `/skill名` 模拟人工主动调用，见 `agent-eval-manual-superpowers.md`）。
+
+## 主题五：对应改进
+
+### 改进一：manual-skill 模式绕开"模型不自发调用"
+
+**问题**：主题一、二所示，deepseek-v4-pro 对 skill 触发指令遵循度低，skill 列表可见也几乎不调用（四变体最高 1 次），各 with-skills 变体实际等价于 empty 基线，变体间对比失去区分度。
+
+**方案**：新增 `run-eval-manual-skill.sh`，不再指望模型自觉触发，改由剧本逐轮 headless 注入 skill 流程文本（首轮 `claude -p`，后续 `--continue` 续接同一会话），模拟人工逐轮输入 `/skill名` 的用法；每个变体配一份 `eval-config-manual-<变体>.yml` 轮次剧本。
+
+**预期效果**：skill 流程的执行不再依赖模型自觉，调用率从"几乎为零"变为"剧本保证逐轮发生"，变体对比恢复区分度。首跑 eval-manual-superpowers-260611093413 验证了流程主干确实被执行（计划文档、逐里程碑提交、收尾 review 均出现），同时也暴露出固定剧本的新问题（spec 在执行期离场），分析与后续方案见 `260611-manual-superpowers-vs-baseline.md`。
+
+### 改进二：gstack 变体布局修复（待执行）
+
+**问题**：主题三所述，gstack 仓库整体放进 `skills/gstack/` 导致嵌套的十余个子 SKILL.md 不可被发现，该变体 run 作废。
+
+**方案**：把子 skill 提平为 `skills/<name>/SKILL.md` 一层布局后重跑；尚未执行。
+
+**预期效果**：gstack 的全部子 skill 进入可发现列表，变体取得与 superpowers/openspec 同等的对比资格。

@@ -32,3 +32,21 @@
 ## 主题三：superpowers 变体缺 SessionStart hook（run 作废）
 
 首次 superpowers 正式运行（eval-superpowers-260610195157）发现：skills 对模型可见（会话中出现 231 次）但 **Skill 工具调用 0 次**——纯 skills 安装缺少官方插件的 SessionStart hook（启动/compact 后注入 using-superpowers 指令），模型不会主动用。已将官方 hook 移植进变体（`home/hooks/` + `home/settings.json`），端到端实测注入生效。**本 run 不能代表 superpowers 真实效果，作废；变体修复后需重跑。**
+
+## 主题四：对应改进
+
+### 改进一：运行时验收纳入评分流程
+
+**问题**：主题二的白屏缺陷属于 tsc 与 esbuild 配置不一致的缝隙，compile / check-types / lint / 单元测试全部无法捕获；若验收只看"四检全绿"，此类缺陷会带着满分进入评分。
+
+**方案**：三步落地。① spec §2 追加 launch.json 要求（`extensionHost` 类型、`outFiles` 指向 `dist/`），保证每个产物 F5 可直接启动调试；② 写一键验收脚本 `eval-test.sh`，按变体名或 run 目录定位产物、补装依赖与构建、拉起扩展开发宿主（WSL 下自动改走 Windows 侧 VS Code）；③ 验收流程规定每个正式 run 评分前先跑该脚本做一次侧栏运行时检查。①②已落地，③待下一次正式评分时执行。
+
+**预期效果**：运行时缺陷在评分前必然暴露，rubric 的 M2 侧栏可用性项按实际运行表现打分；同时"哪些变体能自行避免配置缝隙类缺陷"成为可观测的区分点。
+
+### 改进二：superpowers 变体补齐 SessionStart hook
+
+**问题**：主题三所述，纯 skills 目录安装缺少官方插件的 SessionStart hook，模型开场看不到 using-superpowers 指令，Skill 调用为 0，首次正式 run 作废。
+
+**方案**：将官方 hook 移植进变体（`home/hooks/` + `home/settings.json`），启动与 compact 后自动注入 using-superpowers 指令；端到端实测注入生效。
+
+**预期效果**：消除"装了但开场不可见"这一环境因素，使后续 run 的调用率数据反映模型行为本身。修复后变体已用于当晚重跑，结果（调用率仅 0→1）见 260610-skill-adoption.md。
