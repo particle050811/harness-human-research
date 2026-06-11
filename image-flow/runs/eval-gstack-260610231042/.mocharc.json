@@ -1,5 +1,0 @@
-{
-  "spec": "out/src/test/**/*.test.js",
-  "timeout": 10000,
-  "ui": "tdd"
-}
