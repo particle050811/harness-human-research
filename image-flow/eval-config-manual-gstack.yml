@@ -4,9 +4,9 @@
 # R1 用 /spec（五阶段产出可执行 spec，gstack 的规划入口）；R2~R9 实施与 R10 验证
 # 在 gstack 中没有执行/四检类对应命令，与 empty 同样不带前缀（先例：openspec R10/R11）；
 # R11 用 /review（pre-landing review，与审查轮吻合）。
-# 注意：gstack 内部脚本硬编码 ~/.claude/skills/gstack/bin/ 路径，在隔离
-# CLAUDE_CONFIG_DIR 下不可解析（preamble 均有 || true 兜底）——这是该 skill 在
-# 本评测装法下的固有行为，报告中须注明。
+# 注意：gstack 内部脚本硬编码 ~/.claude/skills/gstack/bin/ 路径。260612 首跑时隔离
+# CLAUDE_CONFIG_DIR 不重定向 ~，工具链全程降级（见 round3-04 改进二）；现 setup 已
+# 给被测会话独立 HOME（.home/.claude 软链回隔离配置目录），该路径可正常解析。
 # 监工模式下 rounds 仅作剧本参考（实际提示词由评测员逐轮拼写），见 CLAUDE.md
 
 extends: ../eval-common.yml

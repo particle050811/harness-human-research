@@ -33,7 +33,10 @@ if [ "$MODE" = "round" ]; then
     CONT_ARGS=(--continue)
   fi
   cd "$RUN_DIR"
-  exec env DISABLE_AUTOUPDATER=1 CLAUDE_CONFIG_DIR="$CONFIG_HOME" "$CLAUDE_BIN" \
+  # EVAL_HOME 由 setup 写入 eval-env；旧 run 的 eval-env 没有该字段则沿用真实 HOME
+  ENV_VARS=(DISABLE_AUTOUPDATER=1 CLAUDE_CONFIG_DIR="$CONFIG_HOME")
+  [ -n "${EVAL_HOME:-}" ] && ENV_VARS+=(HOME="$EVAL_HOME")
+  exec env "${ENV_VARS[@]}" "$CLAUDE_BIN" \
     --settings "$CLAUDE_SETTINGS" \
     --permission-mode "$PERMISSION_MODE" \
     -p "${CONT_ARGS[@]}" "$PROMPT"
@@ -149,7 +152,7 @@ fi
 # 隔离 git：run 目录自带仓库并提交基线。否则 run 目录处于评测仓库工作树内，
 # 被测会话开场注入的 gitStatus 是评测仓库的（分支/提交/路径全部越界），
 # 会把模型引向 image-flow 源目录读写（260611 监工试跑实际发生，run 作废）
-printf '.claude-home/\n' > "$RUN_DIR/.gitignore"
+printf '.claude-home/\n.home/\n' > "$RUN_DIR/.gitignore"
 git -C "$RUN_DIR" init -q -b main
 git -C "$RUN_DIR" -c user.name=eval -c user.email=eval@local add -A
 git -C "$RUN_DIR" -c user.name=eval -c user.email=eval@local commit -qm "初始材料：需求文档与 API 文档"
@@ -161,6 +164,16 @@ if [ -d "$VARIANT_DIR/home" ]; then
   cp -r "$VARIANT_DIR/home/." "$CONFIG_HOME/"
   echo "已安装用户级 skill: $VARIANT/home/ -> $CONFIG_HOME/"
 fi
+
+# 被测会话独立 HOME：gstack 等 skill 工具链硬编码 ~/.claude/... 路径，CLAUDE_CONFIG_DIR
+# 只重定向配置目录不重定向 ~——.home/.claude 软链回隔离配置目录使其可解析，
+# 顺带隔离 ~/.gstack、~/.npm 等用户态副作用（round3-04 改进二）
+EVAL_HOME="$RUN_DIR/.home"
+mkdir -p "$EVAL_HOME"
+ln -s ../.claude-home "$EVAL_HOME/.claude"
+# 真实 ~/.gitconfig 开了 commit.gpgsign，重定向后 gpg 密钥不可用——预置无签名的隔离身份
+printf '[user]\n\tname = eval\n\temail = eval@local\n' > "$EVAL_HOME/.gitconfig"
+echo "已创建被测会话独立 HOME: $EVAL_HOME（.claude -> .claude-home）"
 
 # 路径越界守卫：PreToolUse hook 拦截 run 目录外的文件读写与 Bash 路径引用
 # （嵌套 git 仓库挡不住模型直接猜上级绝对路径——260611 两次监工试跑均实际越界）
@@ -193,8 +206,8 @@ PY
 # 剧本与调用参数放进 .claude-home（git 忽略且不在被测模型视线内），避免剧本剧透
 if [ "$MODE" = "setup" ]; then
   cp -r "$ROUNDS_TMP" "$CONFIG_HOME/rounds"
-  printf 'CLAUDE_BIN=%q\nCLAUDE_SETTINGS=%q\nPERMISSION_MODE=%q\nCONFIG_HOME=%q\n' \
-    "$CLAUDE_BIN" "$CLAUDE_SETTINGS" "$PERMISSION_MODE" "$CONFIG_HOME" > "$CONFIG_HOME/eval-env"
+  printf 'CLAUDE_BIN=%q\nCLAUDE_SETTINGS=%q\nPERMISSION_MODE=%q\nCONFIG_HOME=%q\nEVAL_HOME=%q\n' \
+    "$CLAUDE_BIN" "$CLAUDE_SETTINGS" "$PERMISSION_MODE" "$CONFIG_HOME" "$EVAL_HOME" > "$CONFIG_HOME/eval-env"
   echo "skill 变体: $VARIANT"
   echo "剧本参考: $CONFIG_HOME/rounds/（共 $(ls "$CONFIG_HOME/rounds" | wc -l) 轮）"
   echo "RUN_DIR=$RUN_DIR"
@@ -220,7 +233,7 @@ for rf in "${ROUND_FILES[@]}"; do
   CONT_ARGS=()
   [ "$ROUND_NO" -gt 1 ] && CONT_ARGS=(--continue)
   set +e
-  env DISABLE_AUTOUPDATER=1 CLAUDE_CONFIG_DIR="$CONFIG_HOME" "$CLAUDE_BIN" \
+  env DISABLE_AUTOUPDATER=1 CLAUDE_CONFIG_DIR="$CONFIG_HOME" HOME="$EVAL_HOME" "$CLAUDE_BIN" \
     --settings "$CLAUDE_SETTINGS" \
     --permission-mode "$PERMISSION_MODE" \
     -p "${CONT_ARGS[@]}" "$PROMPT"
