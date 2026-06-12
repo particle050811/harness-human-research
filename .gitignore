@@ -8,6 +8,7 @@ image-flow/runs/**
 !image-flow/runs/*/*/transcript.md
 !image-flow/runs/*/*/transcript.html
 
-# gstack 变体是 46MB 第三方仓库快照（布局有缺陷待重做），只保留顶层 SKILL.md 供查证
-skill-variants/gstack/home/skills/gstack/*
-!skill-variants/gstack/home/skills/gstack/SKILL.md
+# gstack 变体是 46MB 第三方仓库快照（260612 已提平：子 skill 移到 skills/<name>/ 平级以便被发现），
+# 每个 skill 目录只保留 SKILL.md 供查证，其余内容不进 git
+skill-variants/gstack/home/skills/*/*
+!skill-variants/gstack/home/skills/*/SKILL.md
