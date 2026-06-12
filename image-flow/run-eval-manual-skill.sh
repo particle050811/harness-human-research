@@ -152,7 +152,8 @@ fi
 # 隔离 git：run 目录自带仓库并提交基线。否则 run 目录处于评测仓库工作树内，
 # 被测会话开场注入的 gitStatus 是评测仓库的（分支/提交/路径全部越界），
 # 会把模型引向 image-flow 源目录读写（260611 监工试跑实际发生，run 作废）
-printf '.claude-home/\n.home/\n' > "$RUN_DIR/.gitignore"
+# 追加而非覆写：wow-harness 等变体的 project/ 自带 .gitignore（忽略其运行时状态目录）
+printf '.claude-home/\n.home/\n' >> "$RUN_DIR/.gitignore"
 git -C "$RUN_DIR" init -q -b main
 git -C "$RUN_DIR" -c user.name=eval -c user.email=eval@local add -A
 git -C "$RUN_DIR" -c user.name=eval -c user.email=eval@local commit -qm "初始材料：需求文档与 API 文档"
