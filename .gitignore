@@ -12,3 +12,5 @@ image-flow/runs/**
 # 每个 skill 目录只保留 SKILL.md 供查证，其余内容不进 git
 skill-variants/gstack/home/skills/*/*
 !skill-variants/gstack/home/skills/*/SKILL.md
+
+.claude
